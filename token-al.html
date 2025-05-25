@@ -4,22 +4,28 @@
     <meta charset="UTF-8">
     <title>Gizli API Token</title>
     <script>
-        function generateToken() {
-            let token = Math.random().toString(36).substr(2, 16);
-            let encryptedToken = btoa(token); // Tokeni şifrele (base64)
+   function generateToken() {
+    if (!localStorage.getItem("apiToken")) {
+        let token = Math.random().toString(36).substr(2, 16);
+        let encryptedToken = btoa(token); // Tokeni şifrele (base64)
 
-            localStorage.setItem("apiToken", encryptedToken);
-            alert("Token oluşturuldu ve saklandı!");
-        }
+        localStorage.setItem("apiToken", encryptedToken);
+        sessionStorage.setItem("tempToken", token); // Tokeni geçici olarak sakla
+        alert("Token oluşturuldu ve saklandı!");
+    }
+}
 
-        function validateToken(inputToken) {
-            let savedToken = localStorage.getItem("apiToken");
-            if (savedToken && atob(savedToken) === inputToken) {
-                alert("Token doğrulandı!");
-            } else {
-                alert("Geçersiz token!");
-            }
-        }
+window.onload = function() {
+    let tempToken = sessionStorage.getItem("tempToken");
+
+    if (tempToken) {
+        document.getElementById("tokenDisplay").textContent = `Token: ${tempToken}`;
+        sessionStorage.removeItem("tempToken"); // Tokeni sadece 1 kez göster
+    } else {
+        document.getElementById("tokenDisplay").textContent = "Token alınmış, tekrar gösterilemiyor.";
+    }
+};
+
     </script>
 </head>
 <body>
