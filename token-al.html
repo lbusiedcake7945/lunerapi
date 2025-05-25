@@ -5,24 +5,23 @@
     <title>API Token Yönetimi</title>
     <script>
         function generateToken() {
-            if (!localStorage.getItem("apiToken")) {
-                let token = Math.random().toString(36).substr(2, 16);
-                let encryptedToken = btoa(token); // Şifrelenmiş olarak sakla
+            let token = Math.random().toString(36).substr(2, 16);
+            let encryptedToken = btoa(token); // Tokeni şifrele (base64)
 
-                localStorage.setItem("apiToken", encryptedToken); // Tokeni kayıt et
-                alert(`Tokeniniz: ${token}\nLütfen bir yere kaydedin!`);
+            let storedTokens = JSON.parse(localStorage.getItem("apiTokens")) || []; // Daha önceki tokenleri al
+            storedTokens.push(encryptedToken); // Yeni tokeni ekle
+            localStorage.setItem("apiTokens", JSON.stringify(storedTokens)); // Güncellenmiş tokenleri sakla
 
-                sessionStorage.setItem("lastToken", token); // Token geçici olarak saklanır
-            } else {
-                alert("Zaten kayıtlı bir tokeniniz var!");
-            }
+            alert(`Tokeniniz: ${token}\nLütfen bir yere kaydedin!`);
         }
 
         function validateToken() {
             let inputToken = document.getElementById("tokenInput").value;
-            let savedToken = localStorage.getItem("apiToken");
+            let storedTokens = JSON.parse(localStorage.getItem("apiTokens")) || [];
 
-            if (savedToken && atob(savedToken) === inputToken) {
+            let isValid = storedTokens.some(savedToken => atob(savedToken) === inputToken);
+
+            if (isValid) {
                 alert("Token doğrulandı! API erişimi açıldı.");
                 window.location.href = "endpoint.html?token=" + inputToken;
             } else {
@@ -34,7 +33,7 @@
 <body>
 
     <h1>API Token Yönetimi</h1>
-    <button onclick="generateToken()">Token Oluştur</button>
+    <button onclick="generateToken()">Yeni Token Oluştur</button>
 
     <h3>Token Doğrulama</h3>
     <input type="text" id="tokenInput" placeholder="Token gir">
