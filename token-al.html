@@ -4,28 +4,38 @@
     <meta charset="UTF-8">
     <title>Gizli API Token</title>
     <script>
-   function generateToken() {
-    if (!localStorage.getItem("apiToken")) {
-        let token = Math.random().toString(36).substr(2, 16);
-        let encryptedToken = btoa(token); // Tokeni şifrele (base64)
+        function generateToken() {
+            if (!localStorage.getItem("apiToken")) {
+                let token = Math.random().toString(36).substr(2, 16);
+                let encryptedToken = btoa(token);
 
-        localStorage.setItem("apiToken", encryptedToken);
-        sessionStorage.setItem("tempToken", token); // Tokeni geçici olarak sakla
-        alert("Token oluşturuldu!");
-    }
-}
+                localStorage.setItem("apiToken", encryptedToken);
+                sessionStorage.setItem("tempToken", token);
 
-window.onload = function() {
-    let tempToken = sessionStorage.getItem("tempToken");
+                copyToClipboard(token); // Tokeni otomatik olarak kopyala
 
-    if (tempToken) {
-        document.getElementById("tokenDisplay").textContent = `Token: ${tempToken}`;
-        sessionStorage.removeItem("tempToken"); // Tokeni sadece 1 kez göster
-    } else {
-        document.getElementById("tokenDisplay").textContent = "Token alınmış, tekrar gösterilemiyor.";
-    }
-};
+                alert("Token oluşturuldu, otomatik olarak kopyalandı!");
+            }
+        }
 
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                console.log("Token kopyalandı!");
+            }).catch(err => {
+                console.error("Kopyalama hatası:", err);
+            });
+        }
+
+        window.onload = function() {
+            let tempToken = sessionStorage.getItem("tempToken");
+
+            if (tempToken) {
+                document.getElementById("tokenDisplay").textContent = `Token: ${tempToken}`;
+                sessionStorage.removeItem("tempToken");
+            } else {
+                document.getElementById("tokenDisplay").textContent = "Token alınmış, tekrar gösterilemiyor.";
+            }
+        };
     </script>
 </head>
 <body>
@@ -36,6 +46,8 @@ window.onload = function() {
     <h3>Token Doğrulama</h3>
     <input type="text" id="tokenInput" placeholder="Token gir">
     <button onclick="validateToken(document.getElementById('tokenInput').value)">Doğrula</button>
+
+    <p id="tokenDisplay">Token bekleniyor...</p>
 
 </body>
 </html>
