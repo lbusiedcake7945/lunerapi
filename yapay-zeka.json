@@ -1,1 +1,11 @@
+{
+    "versiyon": "1.0",
+    "bilgi": "Bu bir statik yapay zeka JSON dosyasıdır.",
+    "cevaplar": {
+        "selam": "Merhaba! Sana nasıl yardımcı olabilirim?",
+        "nasılsın": "Ben harikayım, ya sen?",
+        "ne yapıyorsun": "Ben veri üretip analiz ediyorum!",
+        "hoşçakal": "Görüşmek üzere!"
+    }
+}
 
