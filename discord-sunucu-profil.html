@@ -35,16 +35,20 @@
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
+
 function generateServerIcon(serverName) {
     if (!serverName) return;
 
-    // Sunucu adındaki "+" ile ayrılmış kelimelerin ilk harflerini al
-    let words = serverName.split("+").map(word => word.charAt(0).toUpperCase());
+    // Hem '+' hem de boşluk karakterlerine göre bölüp gereksiz boşluklar varsa temizleyelim
+    let words = serverName.split(/[\+\s]+/).filter(word => word.length > 0);
 
-    // Minimum 1, maksimum 3 harf/sembol al
-    let initials = words.slice(0, Math.min(3, words.length)).join("");
+    // Her kelimenin ilk harfini alıp büyük harfe çeviriyoruz
+    let initials = words.map(word => word.charAt(0).toUpperCase());
 
-    // Simgeyi güncelle
+    // İlk 1 ile maksimum 3 harf olacak şekilde birleştiriyoruz
+    initials = initials.slice(0, Math.min(3, initials.length)).join('');
+
+    // Sunucu simgesini güncelle
     let icon = document.getElementById("serverIcon");
     if (icon) {
         icon.textContent = initials;
