@@ -1,93 +1,84 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Sunucu Simge Üretici</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #282b30;
-        }
-        .server-icon {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px;
-            font-weight: bold;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Sunucu Simge Üretici</title>
+  <style>
+    body {
+      background-color: #282b30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    /* Opsiyonel: Sayfada oluşturulan logoyu görsel olarak da göstermek için */
+    #serverImage {
+      border-radius: 50%;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-
-    <div class="server-icon" id="serverIcon">?</div>
-<canvas id="serverCanvas" width="200" height="200"></canvas>
-<img id="serverImage" alt="Sunucu Logosu" style="display:none;">
-    <script>
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-             function getRandomColor() {
-    let letters = "0123456789ABCDEF";
-    let color = "#";
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
+  <!-- Bu div istersen ekrana yazı ile metni de gösterebilir; burada görsel öncelikli -->
+  <div id="serverIcon"></div>
+  <!-- Canvas gizli olsa da görseli oluşturmak için kullanıyoruz -->
+  <canvas id="serverCanvas" width="200" height="200" style="display:none;"></canvas>
+  <!-- Oluşturulan resmi göstereceğimiz img etiketi -->
+  <img id="serverImage" alt="Sunucu Logosu">
+  <script>
+    // URL parametrelerini okuyabilmek için
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
     }
-    return color;
-}
-
-function generateServerIcon(serverName) {
-    if (!serverName) return;
-
-    let words = serverName.split(/[\+\s]+/).filter(word => word.length > 0);
-    let initials = words.map(word => word.charAt(0).toUpperCase()).slice(0, 3).join("");
-
-    let canvas = document.getElementById("serverCanvas");
-    let ctx = canvas.getContext("2d");
-
-    // Arka plan rengini rastgele seç
-    let colors = ["#7289DA", "#43B581", "#F04747", "#FAA61A", "#747F8D"];
-    let randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-    // Arka planı çiz
-    ctx.fillStyle = randomColor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Metni ekle
-    ctx.fillStyle = "white";
-    ctx.font = "bold 50px Arial";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(initials, canvas.width / 2, canvas.height / 2);
-
-    // Görseli oluştur ve ekrana göster
-    let imageUrl = canvas.toDataURL("image/png");
-    console.log("Oluşturulan Görsel URL'si:", imageUrl); // Konsola çıktı ekleyelim
-
-    let imgElement = document.getElementById("serverImage");
-    imgElement.src = imageUrl;
-    imgElement.style.display = "block";
-}
-
-
-
-
-
-       
-
-        // URL'den sunucu adını al (Örnek: site.com/?sunucuadi=DiscordServer)
-        let sunucuAdi = getQueryParam("sunucuadi") || prompt("Sunucu adını gir:");
-        generateServerIcon(sunucuAdi);
-    </script>
-
+    
+    // Sunucu simgesini oluşturup canvas'ta resme dönüştüren fonksiyon
+    function generateServerIcon(serverName) {
+      if (!serverName) return;
+      
+      // Artı (+) ve boşluk karakterlerine göre bölüyoruz
+      let words = serverName.split(/[+\s]+/).filter(word => word.length > 0);
+      // Her kelimenin ilk harfini al, büyük harfe çevir ve 3 adet ile sınırla
+      let initials = words.map(word => word.charAt(0).toUpperCase()).slice(0, 3).join("");
+      
+      // Canvas üzerinde çalışıyoruz
+      let canvas = document.getElementById("serverCanvas");
+      let ctx = canvas.getContext("2d");
+      
+      // Rastgele arka plan rengi seçimini yapıyoruz (isteğe bağlı renk paleti)
+      let colors = ["#7289DA", "#43B581", "#F04747", "#FAA61A", "#747F8D"];
+      let randomColor = colors[Math.floor(Math.random() * colors.length)];
+      
+      // Canvas'a arka planı çiz
+      ctx.fillStyle = randomColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Logonun üzerine gelecek metni çiziyoruz
+      ctx.fillStyle = "white";
+      // Font boyutunu canvas boyutuna göre ayarlıyoruz; ihtiyaca göre değiştirilebilir.
+      ctx.font = "bold 80px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(initials, canvas.width / 2, canvas.height / 2);
+      
+      // Oluşturulan görseli data URL olarak elde ediyoruz
+      let imageUrl = canvas.toDataURL("image/png");
+      console.log("Oluşturulan Görsel URL'si:", imageUrl);
+      
+      // <img> etiketi üzerinden görseli ekrana yüklüyoruz
+      let imgElement = document.getElementById("serverImage");
+      imgElement.src = imageUrl;
+      // Discord'da genellikle 100x100 boyut uygun olabilir; CSS veya inline style ile güncelleyebilirsin:
+      imgElement.style.width = "100px";
+      imgElement.style.height = "100px";
+    }
+    
+    // Sunucu adını URL'den alıyoruz. Örneğin: site.com/?sunucuadi=mc+luner
+    let sunucuAdi = getQueryParam("sunucuadi") || prompt("Sunucu adını gir:");
+    generateServerIcon(sunucuAdi);
+  </script>
 </body>
 </html>
+
