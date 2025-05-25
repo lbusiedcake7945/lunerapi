@@ -52,6 +52,28 @@ function generateServerIcon(serverName) {
     let icon = document.getElementById("serverIcon");
     if (icon) {
         icon.textContent = initials;
+        function getRandomColor() {
+    let letters = "0123456789ABCDEF";
+    let color = "#";
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function generateServerIcon(serverName) {
+    if (!serverName) return;
+
+    let words = serverName.split(/[\+\s]+/).filter(word => word.length > 0);
+    let initials = words.map(word => word.charAt(0).toUpperCase()).slice(0, 3).join("");
+
+    let icon = document.getElementById("serverIcon");
+    if (icon) {
+        icon.textContent = initials;
+        icon.style.backgroundColor = getRandomColor(); // Rastgele renk ekle
+    }
+}
+
     }
 }
 
