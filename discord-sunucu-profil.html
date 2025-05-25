@@ -38,21 +38,17 @@
 function generateServerIcon(serverName) {
     if (!serverName) return;
 
-    // Kelimeleri ayır ve her kelimenin baş harfini al
+    // Sunucu adındaki "+" ile ayrılmış kelimelerin ilk harflerini al
     let words = serverName.split("+").map(word => word.charAt(0).toUpperCase());
 
-    // Maksimum 3 harf/sembol al
-    let initials = words.slice(0, 3).join("");
-
-    // Rastgele bir arka plan rengi seç
-    let colors = ["#7289DA", "#43B581", "#F04747", "#FAA61A", "#747F8D"];
-    let randomColor = colors[Math.floor(Math.random() * colors.length)];
+    // İlk 2 harfi al ve "ML" gibi bir format oluştur
+    let initials = words.slice(0, 2).join("");
 
     // Simgeyi güncelle
     let icon = document.getElementById("serverIcon");
     icon.textContent = initials;
-    icon.style.backgroundColor = randomColor;
 }
+
 
        
 
