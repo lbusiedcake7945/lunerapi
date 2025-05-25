@@ -71,11 +71,13 @@ function generateServerIcon(serverName) {
 
     // Görseli oluştur ve ekrana göster
     let imageUrl = canvas.toDataURL("image/png");
-    document.getElementById("serverImage").src = imageUrl;
-    document.getElementById("serverImage").style.display = "block";
+    console.log("Oluşturulan Görsel URL'si:", imageUrl); // Konsola çıktı ekleyelim
 
-    console.log("Görsel URL'si:", imageUrl);
+    let imgElement = document.getElementById("serverImage");
+    imgElement.src = imageUrl;
+    imgElement.style.display = "block";
 }
+
 
 
 
