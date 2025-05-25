@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Parametreli JSON API</title>
+</head>
+<body>
+
+    <p id="response">Veri bekleniyor...</p>
+
+    <script>
+        async function getResponse() {
+            let urlParams = new URLSearchParams(window.location.search);
+            let param = urlParams.get("soru");  // URL'deki 'soru' parametresini al
+
+            let jsonURL = "https://lbusiedcake7945.github.io/lunerapi/yapay-zeka.json";
+            let response = await fetch(jsonURL);
+            let data = await response.json();
+
+            let answer = data.cevaplar[param] || "Üzgünüm, bu soruya yanıtım yok.";
+            document.getElementById("response").textContent = answer;
+        }
+
+        getResponse();
+    </script>
+
+</body>
+</html>
