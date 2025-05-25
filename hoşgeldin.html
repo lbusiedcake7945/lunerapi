@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Discord Hoş Geldin Fotoğrafı</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282b30;
+        }
+        .welcome-box {
+            width: 800px;
+            height: 300px;
+            background-color: #7289DA;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            padding: 20px;
+        }
+        .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: white;
+            overflow: hidden;
+        }
+        .avatar img {
+            width: 100%;
+            height: 100%;
+        }
+        .text {
+            color: white;
+            font-size: 24px;
+            font-family: Arial, sans-serif;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="welcome-box">
+        <div class="avatar">
+            <img id="avatarImg" src="https://example.com/avatar.png" alt="Avatar">
+        </div>
+        <div class="text">
+            <p id="usernameText">Hoş geldin, Kullanıcı!</p>
+            <p id="serverText">Sunucu: Discord Server</p>
+        </div>
+    </div>
+
+    <script>
+        // URL parametrelerinden kullanıcı adı ve avatarı al
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get("username") || "Yeni Üye";
+        const avatar = urlParams.get("avatar") || "https://example.com/default-avatar.png";
+        const server = urlParams.get("server") || "Discord Sunucusu";
+
+        // HTML öğelerine bilgileri ekle
+        document.getElementById("usernameText").textContent = `Hoş geldin, ${username}!`;
+        document.getElementById("serverText").textContent = `Sunucu: ${server}`;
+        document.getElementById("avatarImg").src = avatar;
+    </script>
+
+</body>
+</html>
