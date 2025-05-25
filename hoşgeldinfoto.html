@@ -1,98 +1,91 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Luner API Hoş Geldin Kartı</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Hoşgeldin Görseli</title>
   <style>
-    /* Sayfa ve kart stilleri */
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      padding: 0;
-      background-color: #282b30;
+      background: linear-gradient(135deg, #1e1e2f, #2b2b3c);
       display: flex;
+      align-items: center;
       justify-content: center;
-      align-items: center;
       height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
     }
-    .welcome-box {
-      width: 90vw;
-      max-width: 500px;
+
+    .wrapper {
       padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 15px;
-      background-color: #7289DA; /* Varsayılan arka plan rengi */
-      display: flex;
-      align-items: center;
-      font-family: Arial, sans-serif;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      backdrop-filter: blur(10px);
     }
-    .avatar {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      overflow: hidden;
-      background-color: white;
-      flex-shrink: 0;
-    }
-    .avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .text {
-      margin-left: 20px;
-      color: white;
-      font-size: 2vw;
-    }
-    .text p {
-      margin: 0 0 8px 0;
+
+    canvas {
+      border-radius: 10px;
+      box-shadow: 0 0 10px black;
     }
   </style>
-  <!-- html2canvas kütüphanesi -->
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 </head>
 <body>
-  <!-- Hoş geldin kartı -->
-  <div class="welcome-box" id="welcomeBox">
-    <div class="avatar">
-      <img id="avatarImg" src="busiedcake7945.png" alt="Avatar">
-    </div>
-    <div class="text">
-      <p id="usernameText">Hoş geldin, busiedcake7945!</p>
-      <p id="serverText">Sunucu: mc luner</p>
-    </div>
+  <div class="wrapper">
+    <canvas id="canvas" width="800" height="250"></canvas>
   </div>
-  
+
   <script>
-    // URL parametrelerini al
-    const urlParams   = new URLSearchParams(window.location.search);
-    const username    = urlParams.get("username")   || "busiedcake7945";
-    const avatar      = urlParams.get("avatar")     || "busiedcake7945.png";
-    const server      = urlParams.get("server")     || "mc luner";
-    const background  = urlParams.get("background") || "#7289DA";
-    
-    // HTML öğelerine verileri ekle
-    document.getElementById("usernameText").textContent = `Hoş geldin, ${username}!`;
-    document.getElementById("serverText").textContent   = `Sunucu: ${server}`;
-    document.getElementById("avatarImg").src            = avatar;
-    document.getElementById("welcomeBox").style.backgroundColor = background;
-    
-    // Tüm içerik yüklendikten sonra (avatar dahil) otomatik olarak görsel oluştur ve yönlendir
-    window.addEventListener('load', function() {
-      // Küçük bir gecikme; tüm kaynakların tam yüklendiğini garanti etmek için (gerekirse ayarlanabilir)
-      setTimeout(function(){
-        html2canvas(document.getElementById("welcomeBox"), { scale: 2 })
-          .then(function(canvas) {
-            // Canvas'tan veri URL'si alınıyor (PNG formatında)
-            const dataURL = canvas.toDataURL("image/png");
-            console.log("Oluşturulan Data URL:", dataURL);
-            // Sayfayı direkt veri URL'sine yönlendiriyoruz; sonuç olarak tarayıcıda sadece saf bir resim gösterilecek.
-            window.location.replace(dataURL);
-          })
-          .catch(function(err) {
-            console.error("Görsel oluşturulurken hata:", err);
-          });
-      }, 500);
-    });
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get("username") || "busiedcake7945";
+    const avatar = urlParams.get("avatar") || "busiedcake7945.png";
+    const message = urlParams.get("message") || "Sunucuya hoş geldin!";
+    const title = urlParams.get("title") || "Hoş Geldin!";
+    const bg = urlParams.get("bg");
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    function drawRoundedImage(ctx, img, x, y, width, height, radius) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(x + width / 2, y + height / 2, radius, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.clip();
+      ctx.drawImage(img, x, y, width, height);
+      ctx.restore();
+    }
+
+    const background = new Image();
+    background.crossOrigin = "anonymous";
+    background.src = bg || "https://i.imgur.com/zvWTUVu.png";
+
+    background.onload = () => {
+      ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+      const avatarImg = new Image();
+      avatarImg.crossOrigin = "anonymous";
+      avatarImg.src = avatar;
+
+      avatarImg.onload = () => {
+        drawRoundedImage(ctx, avatarImg, 30, 60, 128, 128, 64);
+
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 36px Arial";
+        ctx.fillText(title, 180, 70);
+
+        ctx.font = "28px Arial";
+        ctx.fillStyle = "#ddd";
+        ctx.fillText(username, 180, 120);
+
+        ctx.font = "24px Arial";
+        ctx.fillStyle = "#ccc";
+        ctx.fillText(message, 180, 160);
+      };
+    };
   </script>
 </body>
 </html>
