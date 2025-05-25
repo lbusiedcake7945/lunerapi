@@ -19,20 +19,25 @@
 
             let answer = data.cevaplar[param] || "Üzgünüm, bu soruya yanıtım yok.";
             document.getElementById("response").textContent = answer;
-        }
-        window.onload = function() {
+            function validateToken() {
     let urlParams = new URLSearchParams(window.location.search);
-    let token = urlParams.get("token"); // URL'den token al
-    let savedToken = localStorage.getItem("apiToken");
+    let inputToken = urlParams.get("token"); // URL'den token al
+    let storedTokens = JSON.parse(localStorage.getItem("apiTokens")) || [];
 
-    if (!token || token !== savedToken) {
-        document.body.innerHTML = "<h1>Erişim Reddedildi!</h1>";
-    } else {
+    let isValid = storedTokens.some(savedToken => atob(savedToken) === inputToken);
+
+    if (isValid) {
+        alert("Token doğrulandı! API erişimi açıldı.");
         document.body.innerHTML = "<h1>API Endpoint Açıldı!</h1>";
+    } else {
+        alert("Geçersiz token!");
+        document.body.innerHTML = "<h1>Erişim Reddedildi!</h1>";
     }
-};
+}
 
+window.onload = validateToken;
 
+     
         getResponse();
     </script>
 
