@@ -33,22 +33,22 @@
     <div class="server-info" id="infoBox"></div>
 
     <script>
-        async function getServerInfo() {
-            let inviteLink = document.getElementById("inviteLink").value;
-            let inviteCode = inviteLink.split("/").pop(); // Davet kodunu al
+async function getServerInfo() {
+    let inviteLink = document.getElementById("inviteLink").value;
+    let inviteCode = inviteLink.split("/").pop(); // Davet kodunu al
 
-            let url = `https://discord.com/api/v10/invites/${inviteCode}`;
+    let url = `https://discord.com/api/v10/invites/${inviteCode}`;
 
-            let response = await fetch(url);
-            let data = await response.json();
+    let response = await fetch(url);
+    let data = await response.json();
 
-            document.getElementById("infoBox").innerHTML = `
-                <p><b>Sunucu Adı:</b> ${data.guild.name}</p>
-                <p><b>Üye Sayısı:</b> ${data.approximate_member_count}</p>
-                <p><b>Sunucu ID:</b> ${data.guild.id}</p>
-            `;
-        }
-    </script>
+    document.getElementById("infoBox").innerHTML = `
+        <p><b>Sunucu Adı:</b> ${data.guild.name}</p>
+        <p><b>Üye Sayısı:</b> ${data.approximate_member_count || "Bilgi Yok"}</p>
+        <p><b>Sunucu ID:</b> ${data.guild.id}</p>
+    `;
+}
+</script>
 
 </body>
 </html>
