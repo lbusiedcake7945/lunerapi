@@ -51,9 +51,7 @@ function generateServerIcon(serverName) {
     let words = serverName.split(/[\+\s]+/).filter(word => word.length > 0);
     let initials = words.map(word => word.charAt(0).toUpperCase()).slice(0, 3).join("");
 
-    let canvas = document.createElement("canvas");
-    canvas.width = 200;
-    canvas.height = 200;
+    let canvas = document.getElementById("serverCanvas");
     let ctx = canvas.getContext("2d");
 
     // Arka plan rengini rastgele seç
@@ -71,19 +69,13 @@ function generateServerIcon(serverName) {
     ctx.textBaseline = "middle";
     ctx.fillText(initials, canvas.width / 2, canvas.height / 2);
 
-    // Görseli oluştur ve URL'yi al
+    // Görseli oluştur ve ekrana göster
     let imageUrl = canvas.toDataURL("image/png");
+    document.getElementById("serverImage").src = imageUrl;
+    document.getElementById("serverImage").style.display = "block";
 
-    // Görseli ekranda göster
-    let icon = document.getElementById("serverIcon");
-    if (icon) {
-        icon.innerHTML = `<img src="${imageUrl}" width="100" height="100" style="border-radius:50%">`;
-    }
-
-    // Linki ekrana yazdır
     console.log("Görsel URL'si:", imageUrl);
 }
-
 
 
 
