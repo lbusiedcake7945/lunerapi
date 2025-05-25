@@ -2,43 +2,33 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Gizli API Token</title>
+    <title>API Token Yönetimi</title>
     <script>
-function generateToken() {
-    if (!localStorage.getItem("apiToken")) {
-        let token = Math.random().toString(36).substr(2, 16);
-        let encryptedToken = btoa(token);
+        function generateToken() {
+            if (!localStorage.getItem("apiToken")) {
+                let token = Math.random().toString(36).substr(2, 16);
+                let encryptedToken = btoa(token); // Şifrelenmiş olarak sakla
 
-        localStorage.setItem("apiToken", encryptedToken);
-        sessionStorage.setItem("tempToken", token);
+                localStorage.setItem("apiToken", encryptedToken); // Tokeni kayıt et
+                alert(`Tokeniniz: ${token}\nLütfen bir yere kaydedin!`);
 
-        document.getElementById("tokenDisplay").textContent = `Token: ${token}`;
-        copyToClipboard(token); // Otomatik kopyalama ekle
+                sessionStorage.setItem("lastToken", token); // Token geçici olarak saklanır
+            } else {
+                alert("Zaten kayıtlı bir tokeniniz var!");
+            }
+        }
 
-        setTimeout(() => { alert("Token oluşturuldu ve kopyalandı!"); }, 500); // Ekran güncellemesi için beklet
-    }
-}
+        function validateToken() {
+            let inputToken = document.getElementById("tokenInput").value;
+            let savedToken = localStorage.getItem("apiToken");
 
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        console.log("Token başarıyla kopyalandı!");
-    }).catch(err => {
-        console.error("Kopyalama hatası:", err);
-        alert("Kopyalama başarısız oldu, tokeni manuel olarak kopyalayın.");
-    });
-}
-
-window.onload = function() {
-    let tempToken = sessionStorage.getItem("tempToken");
-
-    if (tempToken) {
-        document.getElementById("tokenDisplay").textContent = `Token: ${tempToken}`;
-        sessionStorage.removeItem("tempToken");
-    } else {
-        document.getElementById("tokenDisplay").textContent = "Token alınmış, tekrar gösterilemiyor.";
-    }
-};
-
+            if (savedToken && atob(savedToken) === inputToken) {
+                alert("Token doğrulandı! API erişimi açıldı.");
+                window.location.href = "endpoint.html?token=" + inputToken;
+            } else {
+                alert("Geçersiz token!");
+            }
+        }
     </script>
 </head>
 <body>
@@ -48,9 +38,7 @@ window.onload = function() {
 
     <h3>Token Doğrulama</h3>
     <input type="text" id="tokenInput" placeholder="Token gir">
-    <button onclick="validateToken(document.getElementById('tokenInput').value)">Doğrula</button>
-
-    <p id="tokenDisplay">Token bekleniyor...</p>
+    <button onclick="validateToken()">Doğrula</button>
 
 </body>
 </html>
