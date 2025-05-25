@@ -2,42 +2,34 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>API Token Generator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #282b30;
-            color: white;
+    <title>Gizli API Token</title>
+    <script>
+        function generateToken() {
+            let token = Math.random().toString(36).substr(2, 16);
+            let encryptedToken = btoa(token); // Tokeni şifrele (base64)
+
+            localStorage.setItem("apiToken", encryptedToken);
+            alert("Token oluşturuldu ve saklandı!");
         }
-        button {
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 10px;
+
+        function validateToken(inputToken) {
+            let savedToken = localStorage.getItem("apiToken");
+            if (savedToken && atob(savedToken) === inputToken) {
+                alert("Token doğrulandı!");
+            } else {
+                alert("Geçersiz token!");
+            }
         }
-    </style>
+    </script>
 </head>
 <body>
 
-    <h1>API Token Generator</h1>
+    <h1>API Token Yönetimi</h1>
     <button onclick="generateToken()">Token Oluştur</button>
-    <p id="tokenDisplay">Token bekleniyor...</p>
 
-    <script>
-        async function generateToken() {
-            let token = Math.random().toString(36).substr(2, 16); // Rastgele token üret
-            
-            // Tokeni JSON dosyasına kaydet
-            let response = await fetch("tokens.json");
-            let data = await response.json();
-
-            data.users[`user_${Date.now()}`] = token; // Kullanıcı adı yerine benzersiz ID ekleme
-
-            document.getElementById("tokenDisplay").textContent = `Token: ${token}`;
-
-            console.log("Yeni Token:", token);
-        }
-    </script>
+    <h3>Token Doğrulama</h3>
+    <input type="text" id="tokenInput" placeholder="Token gir">
+    <button onclick="validateToken(document.getElementById('tokenInput').value)">Doğrula</button>
 
 </body>
 </html>
