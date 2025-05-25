@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Sunucu Simge Üretici</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282b30;
+        }
+        .server-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="server-icon" id="serverIcon">?</div>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function generateServerIcon(serverName) {
+            if (!serverName) return;
+
+            // İlk harfleri al
+            let initials = serverName.match(/[A-Za-z0-9]/g)?.join('').slice(0, 2).toUpperCase() || '?';
+            
+            // Rastgele bir arka plan rengi seç
+            let colors = ["#7289DA", "#43B581", "#F04747", "#FAA61A", "#747F8D"];
+            let randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            // Simgeyi güncelle
+            let icon = document.getElementById("serverIcon");
+            icon.textContent = initials;
+            icon.style.backgroundColor = randomColor;
+        }
+
+        // URL'den sunucu adını al (Örnek: site.com/?sunucuadi=DiscordServer)
+        let sunucuAdi = getQueryParam("sunucuadi") || prompt("Sunucu adını gir:");
+        generateServerIcon(sunucuAdi);
+    </script>
+
+</body>
+</html>
