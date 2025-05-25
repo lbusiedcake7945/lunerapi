@@ -2,30 +2,35 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Discord Hoş Geldin Fotoğrafı</title>
+    <title>Luner API</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #282b30;
+            background-color: #282b30; /* Varsayılan arka plan */
         }
         .welcome-box {
-            width: 800px;
-            height: 300px;
-            background-color: #7289DA;
+            width: 90vw; /* Genişlik ekranın %90'ı */
+            height: 40vh; /* Yükseklik ekranın %40'ı */
             border-radius: 15px;
             display: flex;
             align-items: center;
             padding: 20px;
+            background-color: #7289DA; /* Varsayılan Discord rengi */
         }
         .avatar {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            background-color: white;
             overflow: hidden;
+            background-color: white;
         }
         .avatar img {
             width: 100%;
@@ -33,7 +38,7 @@
         }
         .text {
             color: white;
-            font-size: 24px;
+            font-size: 2vw;
             font-family: Arial, sans-serif;
             margin-left: 20px;
         }
@@ -41,7 +46,7 @@
 </head>
 <body>
 
-    <div class="welcome-box">
+    <div class="welcome-box" id="welcomeBox">
         <div class="avatar">
             <img id="avatarImg" src="https://example.com/avatar.png" alt="Avatar">
         </div>
@@ -52,16 +57,18 @@
     </div>
 
     <script>
-        // URL parametrelerinden kullanıcı adı ve avatarı al
+        // URL parametrelerinden kullanıcı adı, avatar, sunucu adı ve arka plan rengini al
         const urlParams = new URLSearchParams(window.location.search);
         const username = urlParams.get("username") || "Yeni Üye";
         const avatar = urlParams.get("avatar") || "https://example.com/default-avatar.png";
         const server = urlParams.get("server") || "Discord Sunucusu";
+        const background = urlParams.get("background") || "#7289DA"; // Arka plan rengi değiştirilebilir
 
         // HTML öğelerine bilgileri ekle
         document.getElementById("usernameText").textContent = `Hoş geldin, ${username}!`;
         document.getElementById("serverText").textContent = `Sunucu: ${server}`;
         document.getElementById("avatarImg").src = avatar;
+        document.getElementById("welcomeBox").style.backgroundColor = background;
     </script>
 
 </body>
