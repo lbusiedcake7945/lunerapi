@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>API Token Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #282b30;
+            color: white;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>API Token Generator</h1>
+    <button onclick="generateToken()">Token Oluştur</button>
+    <p id="tokenDisplay">Token bekleniyor...</p>
+
+    <script>
+        async function generateToken() {
+            let token = Math.random().toString(36).substr(2, 16); // Rastgele token üret
+            
+            // Tokeni JSON dosyasına kaydet
+            let response = await fetch("tokens.json");
+            let data = await response.json();
+
+            data.users[`user_${Date.now()}`] = token; // Kullanıcı adı yerine benzersiz ID ekleme
+
+            document.getElementById("tokenDisplay").textContent = `Token: ${token}`;
+
+            console.log("Yeni Token:", token);
+        }
+    </script>
+
+</body>
+</html>
