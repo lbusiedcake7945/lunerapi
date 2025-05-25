@@ -1,5 +1,5 @@
 # lunerapi
-luner api
+2 endpoint açık 3 endpoint kapalı ve 1de token kısmı var
 
 <a href="https://lbusiedcake7945.github.io/lunerapi/discord-sunucu-profil.html?sunucuadi=luner">discord sunucu profili</a>
 
