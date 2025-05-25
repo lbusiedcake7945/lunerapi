@@ -4,38 +4,31 @@
     <meta charset="UTF-8">
     <title>Gizli API Token</title>
     <script>
-        function generateToken() {
-            if (!localStorage.getItem("apiToken")) {
-                let token = Math.random().toString(36).substr(2, 16);
-                let encryptedToken = btoa(token);
+       function generateToken() {
+    if (!localStorage.getItem("apiToken")) {
+        let token = Math.random().toString(36).substr(2, 16);
+        let encryptedToken = btoa(token);
 
-                localStorage.setItem("apiToken", encryptedToken);
-                sessionStorage.setItem("tempToken", token);
+        localStorage.setItem("apiToken", encryptedToken);
+        sessionStorage.setItem("tempToken", token);
 
-                copyToClipboard(token); // Tokeni otomatik olarak kopyala
+        document.getElementById("tokenDisplay").textContent = `Token: ${token}`;
 
-                alert("Token oluşturuldu, otomatik olarak kopyalandı!");
-            }
-        }
+        copyToClipboard(token); // Tokeni otomatik olarak kopyala
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                console.log("Token kopyalandı!");
-            }).catch(err => {
-                console.error("Kopyalama hatası:", err);
-            });
-        }
+        setTimeout(() => { alert("Token oluşturuldu ve kopyalandı!"); }, 100); // Kullanıcıya bildirim ver
+    }
+}
 
-        window.onload = function() {
-            let tempToken = sessionStorage.getItem("tempToken");
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        console.log("Token başarıyla kopyalandı!");
+    }).catch(err => {
+        console.error("Kopyalama hatası:", err);
+        alert("Kopyalama başarısız oldu, tokeni manuel olarak kopyalayın.");
+    });
+}
 
-            if (tempToken) {
-                document.getElementById("tokenDisplay").textContent = `Token: ${tempToken}`;
-                sessionStorage.removeItem("tempToken");
-            } else {
-                document.getElementById("tokenDisplay").textContent = "Token alınmış, tekrar gösterilemiyor.";
-            }
-        };
     </script>
 </head>
 <body>
