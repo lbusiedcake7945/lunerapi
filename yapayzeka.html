@@ -20,6 +20,18 @@
             let answer = data.cevaplar[param] || "Üzgünüm, bu soruya yanıtım yok.";
             document.getElementById("response").textContent = answer;
         }
+        window.onload = function() {
+    let urlParams = new URLSearchParams(window.location.search);
+    let token = urlParams.get("token"); // URL'den token al
+    let savedToken = localStorage.getItem("apiToken");
+
+    if (!token || token !== savedToken) {
+        document.body.innerHTML = "<h1>Erişim Reddedildi!</h1>";
+    } else {
+        document.body.innerHTML = "<h1>API Endpoint Açıldı!</h1>";
+    }
+};
+
 
         getResponse();
     </script>
