@@ -35,22 +35,26 @@
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(param);
         }
+function generateServerIcon(serverName) {
+    if (!serverName) return;
 
-        function generateServerIcon(serverName) {
-            if (!serverName) return;
+    // Kelimeleri ayır ve her kelimenin baş harfini al
+    let words = serverName.split("+").map(word => word.charAt(0).toUpperCase());
 
-            // İlk harfleri al
-            let initials = serverName.match(/[A-Za-z0-9]/g)?.join('').slice(0, 2).toUpperCase() || '?';
-            
-            // Rastgele bir arka plan rengi seç
-            let colors = ["#7289DA", "#43B581", "#F04747", "#FAA61A", "#747F8D"];
-            let randomColor = colors[Math.floor(Math.random() * colors.length)];
+    // Maksimum 3 harf/sembol al
+    let initials = words.slice(0, 3).join("");
 
-            // Simgeyi güncelle
-            let icon = document.getElementById("serverIcon");
-            icon.textContent = initials;
-            icon.style.backgroundColor = randomColor;
-        }
+    // Rastgele bir arka plan rengi seç
+    let colors = ["#7289DA", "#43B581", "#F04747", "#FAA61A", "#747F8D"];
+    let randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+    // Simgeyi güncelle
+    let icon = document.getElementById("serverIcon");
+    icon.textContent = initials;
+    icon.style.backgroundColor = randomColor;
+}
+
+       
 
         // URL'den sunucu adını al (Örnek: site.com/?sunucuadi=DiscordServer)
         let sunucuAdi = getQueryParam("sunucuadi") || prompt("Sunucu adını gir:");
