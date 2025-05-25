@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Luner API Hoş Geldin Kartı</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Sayfa ve kart stilleri */
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #282b30;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .welcome-box {
+      width: 90vw;
+      max-width: 500px;
+      padding: 20px;
+      border-radius: 15px;
+      background-color: #7289DA; /* Varsayılan arka plan rengi */
+      display: flex;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: white;
+      flex-shrink: 0;
+    }
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .text {
+      margin-left: 20px;
+      color: white;
+      font-size: 2vw;
+    }
+    .text p {
+      margin: 0 0 8px 0;
+    }
+  </style>
+  <!-- html2canvas kütüphanesi -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <!-- Hoş geldin kartı -->
+  <div class="welcome-box" id="welcomeBox">
+    <div class="avatar">
+      <img id="avatarImg" src="busiedcake7945.png" alt="Avatar">
+    </div>
+    <div class="text">
+      <p id="usernameText">Hoş geldin, busiedcake7945!</p>
+      <p id="serverText">Sunucu: mc luner</p>
+    </div>
+  </div>
+  
+  <script>
+    // URL parametrelerini al
+    const urlParams   = new URLSearchParams(window.location.search);
+    const username    = urlParams.get("username")   || "busiedcake7945";
+    const avatar      = urlParams.get("avatar")     || "busiedcake7945.png";
+    const server      = urlParams.get("server")     || "mc luner";
+    const background  = urlParams.get("background") || "#7289DA";
+    
+    // HTML öğelerine verileri ekle
+    document.getElementById("usernameText").textContent = `Hoş geldin, ${username}!`;
+    document.getElementById("serverText").textContent   = `Sunucu: ${server}`;
+    document.getElementById("avatarImg").src            = avatar;
+    document.getElementById("welcomeBox").style.backgroundColor = background;
+    
+    // Tüm içerik yüklendikten sonra (avatar dahil) otomatik olarak görsel oluştur ve yönlendir
+    window.addEventListener('load', function() {
+      // Küçük bir gecikme; tüm kaynakların tam yüklendiğini garanti etmek için (gerekirse ayarlanabilir)
+      setTimeout(function(){
+        html2canvas(document.getElementById("welcomeBox"), { scale: 2 })
+          .then(function(canvas) {
+            // Canvas'tan veri URL'si alınıyor (PNG formatında)
+            const dataURL = canvas.toDataURL("image/png");
+            console.log("Oluşturulan Data URL:", dataURL);
+            // Sayfayı direkt veri URL'sine yönlendiriyoruz; sonuç olarak tarayıcıda sadece saf bir resim gösterilecek.
+            window.location.replace(dataURL);
+          })
+          .catch(function(err) {
+            console.error("Görsel oluşturulurken hata:", err);
+          });
+      }, 500);
+    });
+  </script>
+</body>
+</html>
