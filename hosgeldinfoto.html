@@ -2,89 +2,130 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <title>Hoşgeldin Görseli</title>
+  <title>Hoşgeldin Görseli API</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      background: linear-gradient(135deg, #1e1e2f, #2b2b3c);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      font-family: 'Segoe UI', sans-serif;
+      background: transparent;
+      overflow: hidden;
     }
-
-    .wrapper {
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.5);
-      backdrop-filter: blur(10px);
-    }
-
     canvas {
-      border-radius: 10px;
-      box-shadow: 0 0 10px black;
+      display: block;
+      max-width: 100%;
+      height: auto;
     }
   </style>
 </head>
 <body>
-  <div class="wrapper">
-    <canvas id="canvas" width="800" height="250"></canvas>
-  </div>
+  <canvas id="canvas" width="800" height="250"></canvas>
 
   <script>
+    // URL parametrelerini al
     const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get("username") || "busiedcake7945";
-    const avatar = urlParams.get("avatar") || "busiedcake7945.png";
-    const message = urlParams.get("message") || "Sunucuya hoş geldin!";
-    const title = urlParams.get("title") || "Hoş Geldin!";
-    const bg = urlParams.get("bg");
+    const config = {
+      username: urlParams.get("username") || "Yeni Üye",
+      avatar: urlParams.get("avatar") || "https://cdn.discordapp.com/embed/avatars/0.png",
+      message: urlParams.get("message") || "Sunucuya hoş geldin!",
+      title: urlParams.get("title") || "Hoş Geldin!",
+      bg: urlParams.get("bg") || "https://i.imgur.com/a/gsa8WxJ.png",
+      textColor: urlParams.get("textColor") || "#ffffff",
+      avatarBorder: urlParams.get("avatarBorder") || "#5865F2"
+    };
 
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    function drawRoundedImage(ctx, img, x, y, width, height, radius) {
+    // Yuvarlak avatar çizme fonksiyonu
+    function drawRoundedImage(ctx, img, x, y, width, height, radius, borderColor) {
       ctx.save();
+      // Avatar border
+      if(borderColor) {
+        ctx.beginPath();
+        ctx.arc(x + width/2, y + height/2, radius + 5, 0, Math.PI * 2);
+        ctx.fillStyle = borderColor;
+        ctx.fill();
+      }
+      // Avatar kırpma
       ctx.beginPath();
-      ctx.arc(x + width / 2, y + height / 2, radius, 0, Math.PI * 2, true);
+      ctx.arc(x + width/2, y + height/2, radius, 0, Math.PI * 2);
       ctx.closePath();
       ctx.clip();
       ctx.drawImage(img, x, y, width, height);
       ctx.restore();
     }
 
+    // Metin gölgelendirme fonksiyonu
+    function drawTextWithShadow(ctx, text, x, y, color, shadowColor = 'rgba(0,0,0,0.5)') {
+      ctx.shadowColor = shadowColor;
+      ctx.shadowBlur = 5;
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      ctx.fillStyle = color;
+      ctx.fillText(text, x, y);
+      ctx.shadowColor = 'transparent';
+    }
+
+    // Arka plan yükleme
     const background = new Image();
     background.crossOrigin = "anonymous";
-    background.src = bg || "https://i.imgur.com/a/gsa8WxJ.png";
+    background.src = config.bg;
 
     background.onload = () => {
+      // Arka planı çiz
       ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+      
+      // Gradient overlay
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
+      gradient.addColorStop(0, 'rgba(30, 30, 47, 0.7)');
+      gradient.addColorStop(1, 'rgba(43, 43, 60, 0.5)');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+      // Avatar yükleme
       const avatarImg = new Image();
       avatarImg.crossOrigin = "anonymous";
-      avatarImg.src = avatar;
+      avatarImg.src = config.avatar;
 
       avatarImg.onload = () => {
-        drawRoundedImage(ctx, avatarImg, 30, 60, 128, 128, 64);
+        // Avatarı çiz
+        drawRoundedImage(ctx, avatarImg, 30, (canvas.height-128)/2, 128, 128, 64, config.avatarBorder);
 
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "bold 36px Arial";
-        ctx.fillText(title, 180, 70);
+        // Metinleri çiz
+        ctx.textAlign = "left";
+        
+        // Başlık
+        ctx.font = "bold 36px 'Segoe UI', Arial, sans-serif";
+        drawTextWithShadow(ctx, config.title, 180, 70, config.textColor);
+        
+        // Kullanıcı adı
+        ctx.font = "28px 'Segoe UI', Arial, sans-serif";
+        drawTextWithShadow(ctx, config.username, 180, 120, config.textColor);
+        
+        // Mesaj
+        ctx.font = "24px 'Segoe UI', Arial, sans-serif";
+        drawTextWithShadow(ctx, config.message, 180, 160, config.textColor);
 
-        ctx.font = "28px Arial";
-        ctx.fillStyle = "#ddd";
-        ctx.fillText(username, 180, 120);
-
-        ctx.font = "24px Arial";
-        ctx.fillStyle = "#ccc";
-        ctx.fillText(message, 180, 160);
+        // Discord için otomatik PNG dönüşümü
+        setTimeout(() => {
+          const pngUrl = canvas.toDataURL("image/png");
+          if(window !== window.top) {
+            // Iframe içinde ise (Discord embed)
+            document.body.innerHTML = `<img src="${pngUrl}" style="max-width:100%">`;
+          }
+        }, 500);
       };
+
+      avatarImg.onerror = () => {
+        // Avatar yüklenemezse varsayılan avatar kullan
+        avatarImg.src = "https://cdn.discordapp.com/embed/avatars/0.png";
+      };
+    };
+
+    background.onerror = () => {
+      // Arka plan yüklenemezse solid color kullan
+      ctx.fillStyle = '#2b2d31';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
   </script>
 </body>
