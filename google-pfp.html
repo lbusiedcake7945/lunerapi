@@ -30,6 +30,7 @@
       <div id="canvasWrapper">
     <canvas id="pfpCanvas" width="300" height="300" style="border:1px solid #000;"></canvas>
   </div>
+<div id="serverIcon" class="server-icon"></div>
 
     <script>
         function getQueryParam(param) {
@@ -89,14 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
       img.alt = "Discord sunucu görseli";
       img.style.marginTop = "20px";
       document.body.appendChild(img);
-
-      // Aynı zamanda otomatik indir
-      let a = document.createElement('a');
-      a.href = url;
-      a.download = 'sunucu-gorsel.png';
-      a.click();
-    }, 'image/png');
-  }, 500); // biraz bekleyelim ki canvas hazır olsun
         
     </script>
 
