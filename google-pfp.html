@@ -79,16 +79,31 @@ document.addEventListener("DOMContentLoaded", () => {
  // Görseli otomatik oluştur ve sayfada göster
   setTimeout(() => {
     let canvas = document.getElementById("pfpCanvas");
-    canvas.toBlob(function(blob) {
-      let url = URL.createObjectURL(blob);
+   canvas.toBlob(function(blob) {
+  const url = URL.createObjectURL(blob);
 
-      // Sayfaya <img> ekle
-      let img = document.createElement('img');
-      img.src = url;
-      img.alt = "Discord sunucu görseli";
-      img.style.marginTop = "20px";
-      document.body.appendChild(img);
-        
+  // Görseli bir <img> etiketiyle gösterelim:
+  const preview = document.createElement("img");
+  preview.src = url;
+  preview.alt = "Discord görseli";
+  preview.style.borderRadius = "50%";
+  preview.style.width = "100px";
+  preview.style.height = "100px";
+
+  // İsteğe bağlı: bir linkle paylaşılabilir hale getirelim
+  const link = document.createElement("a");
+  link.href = url;
+  link.target = "_blank";
+  link.textContent = "Discord için görseli aç";
+  link.style.display = "block";
+  link.style.marginTop = "10px";
+
+  // Sayfaya ekle
+  const wrapper = document.getElementById("canvasWrapper");
+  wrapper.appendChild(preview);
+  wrapper.appendChild(link);
+}, "image/png");
+
     </script>
 
 </body>
