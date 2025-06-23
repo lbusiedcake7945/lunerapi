@@ -71,10 +71,11 @@ function generateServerIcon(serverName) {
        
 
         
-window.onload = () => {
+document.addEventListener("DOMContentLoaded", () => {
   let sunucuAdi = getQueryParam("isim") || prompt("isim gir:");
   generateServerIcon(sunucuAdi);
-};
+});
+
 
     </script>
 
