@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/icon.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/icon.png", "dest": "api/icon.js" }
+  ]
+}
