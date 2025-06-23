@@ -76,7 +76,28 @@ document.addEventListener("DOMContentLoaded", () => {
   generateServerIcon(sunucuAdi);
 });
 
+ // Görseli otomatik oluştur ve sayfada göster
+  setTimeout(() => {
+    let canvas = document.getElementById("pfpCanvas");
+    canvas.toBlob(function(blob) {
+      let url = URL.createObjectURL(blob);
 
+      // Sayfaya <img> ekle
+      let img = document.createElement('img');
+      img.src = url;
+      img.alt = "Discord sunucu görseli";
+      img.style.marginTop = "20px";
+      document.body.appendChild(img);
+
+      // Aynı zamanda otomatik indir
+      let a = document.createElement('a');
+      a.href = url;
+      a.download = 'sunucu-gorsel.png';
+      a.click();
+    }, 'image/png');
+  }, 500); // biraz bekleyelim ki canvas hazır olsun
+});
+        
     </script>
 
 </body>
